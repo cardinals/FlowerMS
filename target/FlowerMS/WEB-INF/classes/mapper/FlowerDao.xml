@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.coselding.flowerms.dao.FlowerDao">
+    <!-- 目的：为dao接口方法提供配置 -->
+    <insert id="insert" parameterType="Flower">
+        insert into flowers(flowerName,price,images,remarks,number)
+        VALUES (#{flowerName},#{price},#{images},#{remarks},#{number});
+    </insert>
+    <delete id="delete">
+        delete from flowers where flowerID=#{flowerID};
+    </delete>
+    <update id="update" parameterType="FLower">
+        update
+          flowers
+        set
+          flowerName = #{flowerName},
+          price=#{price},
+          images=#{images},
+          remarks=#{remarks},
+          number=#{number}
+        where flowerID=#{flowerID};
+    </update>
+
+    <select id="queryById" resultType="Flower" parameterType="int">
+        select *
+          from flowers
+        where flowerID=#{flowerID};
+    </select>
+    <select id="queryAll" resultType="Flower">
+        select * from flowers;
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from flowers;
+    </select>
+    <select id="queryPage" resultType="Flower">
+        select * from flowers limit #{startindex},#{pagesize};
+    </select>
+
+    <select id="queryCountByName" resultType="int">
+        select count(*) from flowers where flowerName LIKE '%${flowerName}%';
+    </select>
+    <select id="queryPageByName" resultType="Flower">
+        select * from flowers where flowerName LIKE '%${flowerName}%' limit #{startindex},#{pagesize};
+    </select>
+</mapper>

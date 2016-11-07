@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.coselding.flowerms.dao.WorkerDao">
+    <insert id="insert" parameterType="Worker">
+        insert into worker(workername,status)
+        VALUES (#{workername},#{status});
+    </insert>
+    <update id="update" parameterType="Worker">
+        update worker
+        set
+          workername=#{workername},
+          status=#{status}
+        where workerID=#{workerID};
+    </update>
+    <delete id="delete">
+        delete from worker where workerID=#{workerID};
+    </delete>
+    <select id="queryAll" resultType="Worker">
+        select * from worker;
+    </select>
+    <select id="searchWorker" resultType="Worker">
+        select
+          *
+        from worker
+        where (#{workerID}=-1 or workerID=#{workerID}) and (#{workername}='' or workername like '%${workername}%');
+    </select>
+    <select id="queryById" resultType="Worker">
+        select * from worker where workerID=#{workerID};
+    </select>
+</mapper>

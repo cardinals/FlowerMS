@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.coselding.flowerms.dao.OrderDao">
+    <!-- 目的：为dao接口方法提供配置 -->
+    <insert id="insert" parameterType="Order">
+        insert into `orders`(orderDate,sendTime,receiveName,receiveTel,receiveAdd,payState,salesman,sendState,remarks,status,flowerID,quantity,sendName)
+        VALUES (#{orderDate},#{sendTime},#{receiveName},#{receiveTel},#{receiveAdd},#{payState},#{salesman},#{sendState},#{remarks},#{status},#{flowerID},#{quantity},#{sendName});
+    </insert>
+    <delete id="delete">
+        delete from `orders` where orderID=#{orderID};
+    </delete>
+    <update id="update" parameterType="Order">
+        update `orders`
+        SET
+          orderDate=#{orderDate},
+          sendTime=#{sendTime},
+          receiveName=#{receiveName},
+          receiveTel=#{receiveTel},
+          receiveAdd=#{receiveAdd},
+          payState=#{payState},
+          salesman=#{salesman},
+          sendState=#{sendState},
+          remarks=#{remarks},
+          status=#{status},
+          flowerID=#{flowerID},
+          quantity=#{quantity},
+          sendName=#{sendName}
+        where orderID=#{orderID};
+    </update>
+    <select id="queryById" resultType="Order">
+        select * from `orders` where orderID=#{orderID};
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(*) from `orders`;
+    </select>
+    <select id="queryPage" resultType="Order">
+        select * from `orders` o,`worker` w where o.salesman=w.workerID limit #{startindex},#{pagesize};
+    </select>
+
+    <select id="searchOrdersCount" resultType="int">
+        select
+          count(*)
+        from
+          `orders`
+        where
+          (#{orderID}=-1 or orderID=#{orderID})
+          and (#{sendMan}='' or sendName LIKE '%${sendMan}%')
+          and (#{saleman}=-1 or salesman=#{saleman})
+          and (orderDate > #{startTime})
+          and (orderDate <![CDATA[<]]> #{endTime});
+    </select>
+
+    <select id="searchOrdersPage" resultType="Order">
+        select
+          *
+        from
+          `orders`
+        where
+          (#{orderID}=-1 or orderID=#{orderID})
+          and (#{sendMan}='' or sendName LIKE '%${sendMan}%')
+          and (#{saleman}=-1 or salesman=#{saleman})
+          and (orderDate > #{startTime})
+          and (orderDate <![CDATA[<]]> #{endTime})
+        limit #{startindex},#{pagesize};
+    </select>
+
+    <select id="queryCustomerCountByName" resultType="int">
+        select count(*) from `orders` where sendName LIKE '%${customerName}%' group by sendName;
+    </select>
+    <select id="queryCustomerPageByName" resultType="Order">
+        select * from `orders` where sendName LIKE '%${customerName}%' group by sendName limit #{startindex},#{pagesize};
+    </select>
+
+    <select id="queryCustomerCount" resultType="int">
+        select count(*) from `orders` group by sendName;
+    </select>
+    <select id="queryCustomerPage" resultType="Order">
+        select * from `orders` group by sendName limit #{startindex},#{pagesize};
+    </select>
+
+    <select id="queryCustomerAll" resultType="Order">
+        select * from `orders` group by sendName;
+    </select>
+
+    <delete id="deleteCustomer">
+        delete from `orders` where sendName=#{sendName};
+    </delete>
+</mapper>
